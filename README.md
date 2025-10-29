@@ -59,5 +59,58 @@ DynamoDB Table Configuration
 Create DynamoDB Table
 
 Go to AWS Console → DynamoDB → Tables → Create table
+| Field         | Value                |
+| ------------- | -------------------- |
+| Table name    | `StudentTable`       |
+| Partition key | `studentId (String)` |
+
+
+Create Lambda Function
+
+Go to AWS Lambda → Create function
+
+Choose: Author from scratch
+Function name: studentapplication
+Runtime: Java 17
+Role: Create new role with basic Lambda permissions
+Click Create function
+Then:
+Upload the generated JAR (student-lambda-api-1.0-SNAPSHOT-shaded.jar)
+Set Handler to:  com.tushar.studentlambda.StudentHandler::handleRequest
+
+
+Grant DynamoDB Access to Lambda
+
+Go to:
+IAM → Roles → studentapplication-role → Add permissions   ------>>> AmazonDynamoDBFullAccess
+
+Create API Gateway
+
+Go to API Gateway → Create API → REST API
+Create a resource: /students
+Add two methods:
+POST → Integration type: Lambda Function → studentapplication
+GET → Integration type: Lambda Function → studentapplication
+Deploy API:
+Actions → Deploy API → New Stage → dev
+Copy the Invoke URL, e.g.:  https://8altgejrbh.example-api.us-east-1.amazonaws.com/dev
+
+Now test in postman :- 
+save student details   ------>>>>> POST  \
+https://8algejrb.example-api.us-east-1.amazonaws.com/dev/students  \
+{
+  "name": "Tushar",\
+  "email": "tushar@example.com",\
+  "department": "Computer Science"\
+}
+
+
+get student details   --------->>> GET\
+https://8algejrb.example-api.us-east-1.amazonaws.com/dev/students?studentId=07ba63c0-af60-4bd7-90af-ea43d9167f15\
+
+
+
+
+
 
 
